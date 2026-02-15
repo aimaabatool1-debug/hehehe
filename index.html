@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Soban 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* GENERAL STYLING */
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive;
+  background: linear-gradient(160deg, #ffdde1, #ee9ca7, #ffe0ac);
+  overflow: hidden;
+  text-align: center;
+}
+.page {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  transition: opacity 1s ease;
+}
+.active {
+  display: flex;
+  opacity: 1;
+}
+h1 {
+  color: #fff;
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+}
+/* CAKE AND CANDLES */
+.cake {
+  position: relative;
+  width: 280px;
+  height: 180px;
+  background: linear-gradient(to bottom, #ffb6c1, #ff69b4);
+  border-radius: 30px;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+  margin-top: 30px;
+  overflow: hidden;
+}
+.cake::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(to bottom, #fff0, #fff5);
+  border-radius: 0 0 30px 30px;
+}
+.candle {
+  width: 14px;
+  height: 55px;
+  background: linear-gradient(white, #f8f8f8);
+  position: absolute;
+  top: -55px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+}
+.flame {
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #fff3a3, #ff7f50);
+  border-radius: 50%;
+  position: absolute;
+  top: -16px;
+  left: -1px;
+  animation: flicker 0.25s infinite alternate;
+  filter: drop-shadow(0 0 8px orange);
+}
+@keyframes flicker {
+  0% { transform: scale(1); opacity:1; }
+  50% { transform: scale(1.4) rotate(5deg); opacity:0.8; }
+  100% { transform: scale(1.1) rotate(-5deg); opacity:1; }
+}
+.hint {
+  color: white;
+  margin-top: 15px;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+button {
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 25px;
+  background: #ff1493;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+  transition: transform 0.2s;
+}
+button:hover {
+  transform: scale(1.1);
+}
+/* FLOWERS */
+.flower {
+  font-size: 2.8rem;
+  position: absolute;
+  cursor: pointer;
+  animation: fall linear infinite;
+  user-select: none;
+}
+@keyframes fall {
+  0% { transform: translateY(-15vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 1; }
+}
+.bouquet {
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+/* CONFETTI */
+.confetti {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  animation: confettiFall linear infinite;
+  opacity: 0.9;
+  border-radius: 3px;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+}
+/* BACKGROUND CUTE ANIMATION */
+@keyframes floatingHearts {
+  0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-20vh) translateX(50px) rotate(360deg); opacity: 0; }
+}
+.heart {
+  position: absolute;
+  font-size: 2rem;
+  animation: floatingHearts 8s linear infinite;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <h1>🎉 Happy Birthday Soban 🎉</h1>
+  <div class="cake" id="cake">
+    <div class="candle" style="left:50px"><div class="flame"></div></div>
+    <div class="candle" style="left:115px"><div class="flame"></div></div>
+    <div class="candle" style="left:180px"><div class="flame"></div></div>
+  </div>
+  <div class="hint">⬆️ Swipe upward to blow the candles</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <h1>🤍 Make a Wish 🤍</h1>
+  <p style="color:white; max-width:350px; text-shadow: 1px 1px 3px #00000050;">
+    May all your halal wishes come true 🌙  <br>
+    May Allah bless you with happiness, success and peace 🤍 <br>
+    May your smile always stay this bright ✨
+  </p>
+  <button onclick="startFlowers()">Tap to Continue 🌸</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <h1>Collect the Flowers 🌸</h1>
+</div>
+
+<script>
+let startY = null;
+let collectedFlowers = [];
+const flowerTypes = ['🌸','🌼','🌺','🌷','🌻'];
+
+// floating hearts background
+function createHeart(){
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random()*100 + 'vw';
+  heart.style.animationDuration = (5+Math.random()*5)+'s';
+  heart.innerText = '💖';
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(), 10000);
+}
+setInterval(createHeart, 800);
+
+// Swipe detection for candles
+document.addEventListener("touchstart", e => startY = e.touches[0].clientY);
+document.addEventListener("touchend", e => {
+  let endY = e.changedTouches[0].clientY;
+  if (startY - endY > 50) blowCandles();
+});
+
+function blowCandles() {
+  document.querySelectorAll('.flame').forEach(f => f.style.display = 'none');
+  setTimeout(() => showPage(2), 1000);
+}
+
+function showPage(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
+
+function startFlowers() {
+  showPage(3);
+  for(let i=0;i<15;i++) createFlower();
+}
+
+function createFlower() {
+  const flower = document.createElement('div');
+  const type = flowerTypes[Math.floor(Math.random()*flowerTypes.length)];
+  flower.className = 'flower';
+  flower.innerHTML = type;
+  flower.style.left = Math.random() * 90 + 'vw';
+  flower.style.animationDuration = 5 + Math.random()*5 + 's';
+
+  flower.onclick = () => {
+    flower.remove();
+    collectedFlowers.push(type);
+    if(collectedFlowers.length === 5) showBouquet();
+  };
+
+  document.getElementById('page3').appendChild(flower);
+}
+
+function showBouquet() {
+  const bouquetDiv = document.createElement('div');
+  bouquetDiv.className = 'bouquet';
+  collectedFlowers.forEach(f => {
+    const fDiv = document.createElement('span');
+    fDiv.innerHTML = f;
+    bouquetDiv.appendChild(fDiv);
+  });
+  document.getElementById('page3').innerHTML = '';
+  document.getElementById('page3').appendChild(bouquetDiv);
+
+  const h1 = document.createElement('h1');
+  h1.innerText = 'Thank you for being in my life 🤍';
+  h1.style.color = 'white';
+  h1.style.textShadow = '1px 1px 3px #00000050';
+  document.getElementById('page3').appendChild(h1);
+
+  const p = document.createElement('p');
+  p.innerHTML = 'You made my world brighter, calmer and better 🌷 <br> I’m grateful for you, always.';
+  p.style.color = 'white';
+  p.style.maxWidth = '350px';
+  p.style.textShadow = '1px 1px 3px #00000050';
+  document.getElementById('page3').appendChild(p);
+
+  startConfetti();
+}
+
+// Confetti animation
+function startConfetti(){
+  for(let i=0;i<100;i++){
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.backgroundColor = `hsl(${Math.random()*360},80%,60%)`;
+    conf.style.left = Math.random()*100 + 'vw';
+    conf.style.animationDuration = 3 + Math.random()*3 + 's';
+    document.body.appendChild(conf);
+    setTimeout(()=> conf.remove(), 6000);
+  }
+}
+</script>
+
+</body>
+</html>
